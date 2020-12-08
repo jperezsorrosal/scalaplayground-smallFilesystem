@@ -1,7 +1,7 @@
 package rockthejvm.exercises.filesystem.commands
 
 import rockthejvm.exercises.filesystem.State
-import rockthejvm.exercises.filesystem.files.DirEntry
+import rockthejvm.exercises.filesystem.files.{DirEntry, EntryType}
 
 import scala.annotation.tailrec
 
@@ -20,7 +20,8 @@ class LS extends Command {
     def loop(contents: List[DirEntry], acc: String): String = {
       if (contents.isEmpty) acc
       else {
-        val entryOutput = s"\n<${contents.head.getType}>\t${contents.head.name}"
+        val separator = if (contents.head.getType == EntryType.File) "\t\t" else "\t"
+        val entryOutput = s"\n<${contents.head.getType}>$separator${contents.head.name}"
         loop(contents.tail, acc + entryOutput)
       }
     }

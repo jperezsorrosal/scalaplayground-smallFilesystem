@@ -1,6 +1,7 @@
 package rockthejvm.exercises.filesystem.files
 
 import rockthejvm.exercises.filesystem.files.EntryType.EntryType
+import rockthejvm.exercises.filesystem.filesystem.FileSystemException
 
 import scala.annotation.tailrec
 
@@ -36,6 +37,8 @@ class Directory(override val parentPath: String, override val name: String, val 
     new Directory(parentPath, name, contents.filter(!_.name.equals(entryName)) :+ newEntry)
 
   override def asDirectory: Directory = this
+
+  override def asFile: File = throw new FileSystemException("A directory cannot be converted to a file")
 
   override def getType: EntryType = EntryType.Directory
 }

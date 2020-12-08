@@ -10,6 +10,7 @@ trait Command {
 object Command {
   val MKDIR = "mkdir"
   val LS = "ls"
+  val PWD = "pwd"
 
   def incompleteCommand(name: String): Command = new Command {
     override def apply(state: State): State = {
@@ -40,6 +41,9 @@ object Command {
 
       case Array(c @ LS) => new LS
       case Array(c @ LS, _*) => incompleteCommand(c)
+
+      case Array(PWD) => new PWD
+      case Array(c @ PWD, _*) => incompleteCommand(c)
 
       case _ => new Unknown
     }

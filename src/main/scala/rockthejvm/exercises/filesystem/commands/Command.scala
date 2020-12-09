@@ -12,6 +12,8 @@ object Command {
   val LS = "ls"
   val PWD = "pwd"
   val TOUCH = "touch"
+  val CD = "cd"
+  val QUIT = "quit"
 
   def incompleteCommand(name: String): Command = new Command {
     override def apply(state: State): State = {
@@ -49,6 +51,12 @@ object Command {
       case Array(c @ TOUCH) => incompleteCommand(c)
       case Array(TOUCH, dirName) => new Touch(dirName)
       case Array(c @ TOUCH, _, _*) => incompleteCommand(c)
+
+      case Array(c @ CD) => incompleteCommand(c)
+      case Array(CD, dirName) => new CD(dirName)
+      case Array(c @ CD, _, _*) => incompleteCommand(c)
+
+      case Array(QUIT) => new Quit
 
       case _ => new Unknown
     }

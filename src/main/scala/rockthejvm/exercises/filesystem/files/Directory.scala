@@ -7,6 +7,11 @@ import scala.annotation.tailrec
 
 class Directory(override val parentPath: String, override val name: String, val contents: List[DirEntry]) extends DirEntry(parentPath, name) {
 
+  def isRoot: Boolean = parentPath.isEmpty
+
+  override def isDirectory: Boolean = true
+
+  override def isFile: Boolean = false
 
   def hasEntry(dirName: String): Boolean = !findEntry(dirName).isEmpty
 

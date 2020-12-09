@@ -20,6 +20,8 @@ object Filesystem extends App {
   def mainLoop(state: State): State =  {
     state.show
 
+    if (state.output.equals(Command.QUIT)) return initState // return so quit
+
     val input = StdIn.readLine
 
     val command = Command.from(input)

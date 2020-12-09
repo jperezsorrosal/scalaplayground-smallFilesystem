@@ -4,7 +4,13 @@ import rockthejvm.exercises.filesystem.files.EntryType.EntryType
 
 abstract class DirEntry(val parentPath: String, val name: String) {
 
-  def path: String = s"${parentPath}${Directory.SEPARATOR}${name}"
+  def path: String = {
+
+    val separtorIfNecessary =
+      if (parentPath.equals(Directory.SEPARATOR)) "" else Directory.SEPARATOR
+
+    s"${parentPath}${separtorIfNecessary}${name}"
+  }
 
   def asDirectory: Directory
   def asFile: File

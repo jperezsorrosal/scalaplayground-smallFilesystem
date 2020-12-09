@@ -53,13 +53,39 @@ class CD(dirName: String) extends Command {
       }
     }
 
+    @tailrec
+    def collapseRelativeTokens(path: List[String], result: List[String]) : Option[List[String]] = path match {
+      case List() =>  Some(result)
+      case "." :: t => collapseRelativeTokens(t, result)
+      case ".." :: t if result.isEmpty => None
+      case ".." :: t  => collapseRelativeTokens(t, result.init) // init = all elements of list but last
+      case h::t => collapseRelativeTokens(t, result :+ h)
+    }
+
     // is an absolute path
     assert(path.startsWith(Directory.SEPARATOR))
 
     // tokens
     val tokens = path.substring(1).split(Directory.SEPARATOR).toList
 
+
+    /*
+      support relative paths . .. ./../..
+      need to eliminate/collapse relative tokens
+
+      /a/.  => [a, .] => [a]
+      /a/./. => [a, ., .] => [a]
+
+      /a/.. => [a, ..] => []
+      /a/b/.. => [a, b, ..] => [a]
+     */
+
+    val newTokens = collapseRelativeTokens(tokens, List.empty)
+
     // navigate to correct entry
-    findEntryHelper(root, tokens)
+    for {
+      tokens <- newTokens
+      entry <- findEntryHelper(root, tokens)
+    } yield entry
   }
 }

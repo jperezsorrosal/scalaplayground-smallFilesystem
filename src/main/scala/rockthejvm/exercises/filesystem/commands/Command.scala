@@ -13,6 +13,7 @@ object Command {
   val PWD = "pwd"
   val TOUCH = "touch"
   val CD = "cd"
+  val RM = "rm"
   val QUIT = "quit"
 
   def incompleteCommand(name: String): Command = new Command {
@@ -55,6 +56,10 @@ object Command {
       case Array(c @ CD) => incompleteCommand(c)
       case Array(CD, dirName) => new CD(dirName)
       case Array(c @ CD, _, _*) => incompleteCommand(c)
+
+      case Array(c @ RM) => incompleteCommand(c)
+      case Array(RM, dirName) => new Rm(dirName)
+      case Array(c @ RM, _, _*) => incompleteCommand(c)
 
       case Array(QUIT) => new Quit
 

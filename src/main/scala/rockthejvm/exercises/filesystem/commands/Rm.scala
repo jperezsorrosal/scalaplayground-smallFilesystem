@@ -36,7 +36,7 @@ class Rm(name: String) extends Command {
         for {
           nextDirectory <- currentDirectory.findEntry(h) if nextDirectory.isDirectory
           newNextDirectory <- rmHelper(nextDirectory.asDirectory, t)
-        } yield currentDirectory.replaceEntry(h, newNextDirectory)
+        } yield currentDirectory.replaceEntry(h, newNextDirectory).asDirectory
     }
 
     val tokens = path.substring(1).split(Directory.SEPARATOR).toList

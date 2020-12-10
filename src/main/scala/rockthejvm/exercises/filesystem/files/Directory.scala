@@ -47,7 +47,7 @@ class Directory(override val parentPath: String, override val name: String, val 
     findEntryLoop(entryName, contents)
   }
 
-  def replaceEntry(entryName: String, newEntry: Directory): Directory =
+  def replaceEntry(entryName: String, newEntry: DirEntry): DirEntry =
     new Directory(parentPath, name, contents.filter(!_.name.equals(entryName)) :+ newEntry)
 
   override def asDirectory: Directory = this

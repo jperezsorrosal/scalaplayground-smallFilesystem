@@ -28,12 +28,10 @@ abstract class CreateEntry(entryName: String) extends Command {
     def updateStructure(currentDirectory: Directory, path: List[String], newDirectory: DirEntry): Option[Directory] = {
       if (path.isEmpty) Some(currentDirectory.addEntry(newDirectory))
       else {
-        val oldEntry = currentDirectory.findEntry(path.head).map(_.asDirectory) // TODO: could old Entry be a file??
-
         for {
-          old <- oldEntry
-          updatedEntry <- updateStructure(old, path.tail, newDirectory)
-        } yield currentDirectory.replaceEntry(old.name, updatedEntry)
+          oldEntry <- currentDirectory.findEntry(path.head)
+          updatedEntry <- updateStructure(oldEntry.asDirectory, path.tail, newDirectory)
+        } yield currentDirectory.replaceEntry(oldEntry.name, updatedEntry).asDirectory
       }
     }
 

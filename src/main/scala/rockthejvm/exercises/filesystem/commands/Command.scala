@@ -15,6 +15,7 @@ object Command {
   val CD = "cd"
   val RM = "rm"
   val QUIT = "quit"
+  val ECHO = "echo"
 
   def incompleteCommand(name: String): Command = new Command {
     override def apply(state: State): State = {
@@ -60,6 +61,9 @@ object Command {
       case Array(c @ RM) => incompleteCommand(c)
       case Array(RM, dirName) => new Rm(dirName)
       case Array(c @ RM, _, _*) => incompleteCommand(c)
+
+      case Array(c @ ECHO) => incompleteCommand(c)
+      case Array(ECHO, args @  _*) => new Echo(args:_*)
 
       case Array(QUIT) => new Quit
 

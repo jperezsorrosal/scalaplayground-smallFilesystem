@@ -5,30 +5,37 @@ import rockthejvm.exercises.filesystem.files.Directory
 
 import java.util.Scanner
 import scala.annotation.tailrec
+import scala.io.Source.stdin
 import scala.io.StdIn
 
 object Filesystem extends App {
 
-
-  val scanner = new Scanner(System.in)
-
   val root = Directory.ROOT
   val initState = State(root, root)
 
+  initState.show
 
-  @tailrec
-  def mainLoop(state: State): State =  {
-    state.show
+  stdin.getLines().foldLeft(initState){ (currentState, line) =>
 
-    if (state.output.equals(Command.QUIT)) return initState // return so quit
+    val newState = Command.from(line)(currentState)
+    newState.show
 
-    val input = StdIn.readLine
-
-    val command = Command.from(input)
-    val newState = command(state)
-
-    mainLoop(newState)
+    newState
   }
 
-  mainLoop(initState)
+//  @tailrec
+//  def mainLoop(state: State): State =  {
+//    state.show
+//
+//    if (state.output.equals(Command.QUIT)) return initState // return so quit
+//
+//    val input = StdIn.readLine
+//
+//    val command = Command.from(input)
+//    val newState = command(state)
+//
+//    mainLoop(newState)
+//  }
+//
+//  mainLoop(initState)
 }

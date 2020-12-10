@@ -31,7 +31,7 @@ class Echo(args: String*) extends Command {
       val dirEntry = currentDirectory.findEntry(entryName)
 
       if (dirEntry.isEmpty) Some(currentDirectory.addEntry(new File(currentDirectory.path, entryName, contents)))
-      else if (dirEntry.get.isDirectory) Some(currentDirectory)
+      else if (dirEntry.get.isDirectory) None
       else
         if (append) Some(currentDirectory.replaceEntry(entryName, dirEntry.get.asFile.appendContents(contents)).asDirectory)
         else Some(currentDirectory.replaceEntry(entryName, dirEntry.get.asFile.setContents(contents)).asDirectory)

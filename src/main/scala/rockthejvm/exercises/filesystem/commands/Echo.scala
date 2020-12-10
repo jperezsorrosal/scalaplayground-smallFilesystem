@@ -31,7 +31,7 @@ class Echo(args: String*) extends Command {
       val dirEntry = currentDirectory.findEntry(entryName)
 
       if (dirEntry.isEmpty) Some(currentDirectory.addEntry(new File(currentDirectory.path, entryName, contents)))
-      else if (dirEntry.get.isDirectory) None
+      else if (dirEntry.get.isDirectory) Some(currentDirectory)
       else
         if (append) Some(currentDirectory.replaceEntry(entryName, dirEntry.get.asFile.appendContents(contents)).asDirectory)
         else Some(currentDirectory.replaceEntry(entryName, dirEntry.get.asFile.setContents(contents)).asDirectory)
@@ -39,8 +39,8 @@ class Echo(args: String*) extends Command {
     case entryName :: pathTail =>
       {
         for {
-          nextDirectory <- currentDirectory.findEntry(entryName) if nextDirectory.isDirectory
-          newNextDirectory <- getRootAfterEcho(nextDirectory.asDirectory, pathTail, contents, append)
+          nextDirectory <- currentDirectory.findEntry(entryName).map(_.asDirectory)
+          newNextDirectory <- getRootAfterEcho(nextDirectory, pathTail, contents, append)
           root <- Some(currentDirectory.replaceEntry(entryName, newNextDirectory))
         } yield root
       }.map(_.asDirectory)
